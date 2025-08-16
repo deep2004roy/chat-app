@@ -14,9 +14,9 @@ const Sidebar = () => {
     setUnseenMessages,
   } = useContext(ChatContext);
 
-  const { logout, onlineUsers } = useContext(AuthContext);
+  const { logout, onlineUsers, authUser } = useContext(AuthContext);
 
-  const [input, setInput] = useState(false);
+  const [input, setInput] = useState("");
 
   const navigate = useNavigate();
 
@@ -27,8 +27,11 @@ const Sidebar = () => {
     : users;
 
   useEffect(() => {
-    getUsers();
-  }, [onlineUsers]);
+    if (authUser) {
+      // Only fetch if authenticated
+      getUsers();
+    }
+  }, [onlineUsers, authUser]);
 
   return (
     <div

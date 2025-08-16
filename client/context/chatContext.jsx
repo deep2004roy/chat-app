@@ -10,7 +10,14 @@ export const ChatProvider = ({ children }) => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [unseenMessages, setUnseenMessages] = useState({});
 
-  const { socket, axios } = useContext(AuthContext);
+  const { socket, axios, authUser } = useContext(AuthContext);
+
+  useEffect(() => {
+    if (authUser && axios) {
+      console.log("Fetching users for authenticated user:", authUser);
+      getUsers();
+    }
+  }, [authUser]);
 
   // function to get all users for sidebar
   const getUsers = async () => {

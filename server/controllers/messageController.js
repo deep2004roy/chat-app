@@ -7,7 +7,7 @@ import { io, userSocketMap } from "../server.js"
 // Get all users except the logged in user
 export const getUserForSidebar = async (req, res) => {
     try {
-        const userId = req.user._Id
+        const userId = req.user._id
         const filteredUsers = await User.find({ _id: { $ne: userId } })
             .select("-password")
         
