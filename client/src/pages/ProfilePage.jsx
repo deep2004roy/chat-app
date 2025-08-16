@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import assets from "../assets/assets";
 import { AuthContext } from "../../context/AuthContext";
@@ -7,8 +7,17 @@ const ProfilePage = () => {
   const { authUser, updateProfile } = useContext(AuthContext);
   const [selectedImage, setSelectedImage] = useState(null);
   const navigate = useNavigate();
-  const [name, setName] = useState(authUser.fullName);
-  const [bio, setBio] = useState(authUser.bio);
+  const [name, setName] = useState(authUser?.fullName || "");
+  const [bio, setBio] = useState(authUser?.bio || "");
+
+  if (!authUser) return <div>Loading...</div>;
+
+  useEffect(() => {
+    if (authUser) {
+      setName(authUser.fullName || "");
+      setBio(authUser.bio || "");
+    }
+  }, [authUser]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

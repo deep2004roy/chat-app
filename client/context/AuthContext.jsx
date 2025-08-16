@@ -31,10 +31,12 @@ export const AuthProvider = ({ children }) => {
     try {
       const { data } = await axios.post(`/api/auth/${state}`, credentials);
       if (data.success) {
-        setAuthUser(data.userData);
-        connectSocket(data.userData);
+        setAuthUser(data.user);
+        setToken(data.token);
+
         axios.defaults.headers.common["Authorization"] = `Bearer ${data.token}`;
         localStorage.setItem("token", data.token);
+        connectSocket(data.user);
         toast.success(data.message);
       } else {
         toast.error(data.message);
@@ -50,9 +52,10 @@ export const AuthProvider = ({ children }) => {
     setToken(null);
     setAuthUser(null);
     setOnlineUsers([]);
-    axios.defaults.headers.common[token] = null;
+
+    delete axios.defaults.headers.common["Authorization"];
     toast.success("logged out successfully");
-    socket.disconnect();
+    socket?.disconnect();
   };
 
   // Update profile function to handle user profile updates
